@@ -31,7 +31,7 @@ class ReportGeneratorAgent(BaseAgent):
                 "data": {"report_path": str(rp), "json_path": str(jp), "report_content": report, "chart_count": len(charts)}}
 
     def _gen_md(self, fi, ov, cr, ar, charts):
-        L = ["# 数据分析报告", f"\\n**生成时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        L = ["# 数据分析报告", f"**生成时间**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
              f"**数据文件**: {fi.get('filename','N/A')}", f"**数据规模**: {fi.get('rows','N/A')} 行 x {fi.get('columns','N/A')} 列", ""]
         L += ["## 一、数据概览", "", f"- **数据维度**: {ov.get('shape',{}).get('rows','N/A')} 行 x {ov.get('shape',{}).get('columns','N/A')} 列",
               f"- **重复行数**: {ov.get('duplicate_count',0)}", f"- **内存占用**: {fi.get('memory_usage','N/A')}", "",
@@ -67,4 +67,4 @@ class ReportGeneratorAgent(BaseAgent):
                 if ch.get("path"): L.append(f"![{ch.get('title','')}](./{Path(ch['path']).name})")
                 L.append("")
         L += ["---", "*本报告由多 Agent 协作自动化数据分析系统自动生成*"]
-        return "\\n".join(L)
+        return "\n".join(L)

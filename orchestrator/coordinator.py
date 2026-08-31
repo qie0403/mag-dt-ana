@@ -76,7 +76,7 @@ class Coordinator:
         if agent_name not in self.agents:
             return {"status":"error","agent_name":agent_name,"message":f"未知的 Agent: {agent_name}"}
         agent = self.agents[agent_name]
-        self.logger.info(f"\\n--- 执行 Agent: {agent.name} ({agent.role}) ---")
+        self.logger.info(f"\n--- 执行 Agent: {agent.name} ({agent.role}) ---")
         result = agent.execute(self.context)
         result["subtask_id"] = subtask["id"]
         result["subtask_name"] = subtask["name"]
