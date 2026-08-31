@@ -1,5 +1,7 @@
 """报告生成 Agent"""
+import base64
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 from agents.base_agent import BaseAgent
@@ -64,7 +66,12 @@ class ReportGeneratorAgent(BaseAgent):
             L += ["", "## 五、可视化图表", ""]
             for i, ch in enumerate(charts, 1):
                 L += [f"### {i}. {ch.get('title',f'图表{i}')}", ""]
-                if ch.get("path"): L.append(f"![{ch.get('title','')}](./{Path(ch['path']).name})")
+                if ch.get("path") and os.path.exists(ch["path"]):
+                    with open(ch["path"], "rb") as img_f:
+                        img_b64 = base64.b64encode(img_f.read()).decode()
+                    L.append(f"![{ch.get('title','')}](data:image/png;base64,{img_b64})")
+                elif ch.get("path"):
+                    L.append(f"![{ch.get('title','')}](./{Path(ch['path']).name})")
                 L.append("")
         L += ["---", "*本报告由多 Agent 协作自动化数据分析系统自动生成*"]
         return "\n".join(L)
