@@ -37,7 +37,7 @@ class AnalysisTools:
         return result
 
     @staticmethod
-    def correlation_analysis(df):
+    def correlation_analysis(df, threshold=0.3):
         numeric_cols = df.select_dtypes(include=[np.number]).columns.tolist()
         if len(numeric_cols) < 2:
             return {"correlation_matrix": {}, "strong_correlations": [], "note": "数值型列不足2列"}
@@ -46,7 +46,7 @@ class AnalysisTools:
         for i in range(len(numeric_cols)):
             for j in range(i+1, len(numeric_cols)):
                 v = corr.iloc[i,j]
-                if not np.isnan(v) and abs(v) >= 0.5:
+                if not np.isnan(v) and abs(v) >= threshold:
                     strong.append({"var1": numeric_cols[i], "var2": numeric_cols[j],
                         "correlation": round(float(v),4), "strength": "强" if abs(v)>=0.8 else "中等",
                         "direction": "正相关" if v>0 else "负相关"})

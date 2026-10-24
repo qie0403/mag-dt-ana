@@ -9,11 +9,11 @@ from config import RUN_MODE, SAMPLES_DIR, OUTPUT_DIR, AGENT_CONFIG
 from orchestrator.coordinator import Coordinator
 from utils.logger import AgentLogger
 
-st.set_page_config(page_title="多Agent协作数据分析系统", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="DataPilot · 多Agent智能分析平台", page_icon="🤖", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""<style>
-.main-header{font-size:2rem;font-weight:bold;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.agent-card{background:#f0f2f6;border-radius:10px;padding:12px;margin:5px 0;border-left:4px solid #667eea}
+.main-header{font-size:2rem;font-weight:bold;background:linear-gradient(135deg,#0ea5e9 0%,#14b8a6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.agent-card{background:#f0fdfa;border-radius:10px;padding:12px;margin:5px 0;border-left:4px solid #0ea5e9}
 .status-success{color:#2ecc71;font-weight:bold}.status-error{color:#e74c3c;font-weight:bold}
 .log-entry{font-family:monospace;font-size:0.85rem;padding:4px 8px;border-bottom:1px solid #eee}
 </style>""", unsafe_allow_html=True)
@@ -32,12 +32,12 @@ with st.sidebar:
         c = colors.get(aid,"#666")
         st.markdown(f'<div class="agent-card" style="border-left-color:{c}"><div style="font-weight:bold;color:{c}">{info["name"]}</div><div style="font-size:0.8rem;color:#666">{info["role"]}</div></div>', unsafe_allow_html=True)
     st.markdown("---"); st.caption("数据读取 → 数据清洗 → 数据分析 → 可视化 → 报告生成")
-    if st.button("🔄 重置系统", use_container_width=True):
+    if st.button("🔄 重置系统", width='stretch'):
         for k in ["coordinator","result","is_running","progress_logs"]: st.session_state[k] = None if k!="is_running" else False
         st.session_state.progress_logs = []; st.rerun()
 
-st.markdown('<p class="main-header">🤖 多 Agent 协作自动化数据分析系统</p>', unsafe_allow_html=True)
-st.caption("上传数据文件，系统将自动完成 读取→清洗→分析→可视化→报告 全流程")
+st.markdown('<p class="main-header">🤖 DataPilot · 多 Agent 智能分析平台</p>', unsafe_allow_html=True)
+st.caption("上传数据文件，多 Agent 团队将自动完成 读取→清洗→分析→可视化→报告 全流程")
 tab1, tab2, tab3 = st.tabs(["📤 任务提交", "⚙️ 执行过程", "📊 分析结果"])
 
 with tab1:
@@ -49,7 +49,7 @@ with tab1:
         st.markdown("### 2. 任务描述")
         task_desc = st.text_area("描述你想要的分析（可选）", value="完整数据分析", height=80)
         st.markdown("### 3. 开始执行")
-        run_btn = st.button("🚀 启动分析", type="primary", use_container_width=True, disabled=st.session_state.is_running)
+        run_btn = st.button("🚀 启动分析", type="primary", width='stretch', disabled=st.session_state.is_running)
     with c2:
         st.markdown("### 执行流程预览")
         for icon,name,agent,color in [("📂","数据读取","DataReaderAgent","#3498db"),("🧹","数据清洗","DataCleanerAgent","#2ecc71"),("📈","数据分析","DataAnalystAgent","#e67e22"),("📊","可视化","VisualizerAgent","#9b59b6"),("📝","报告生成","ReportGeneratorAgent","#e74c3c")]:
@@ -108,7 +108,7 @@ with tab3:
             for i, ch in enumerate(charts):
                 with cc[i%2]:
                     cp = ch.get("path","")
-                    if cp and os.path.exists(cp): st.image(cp, caption=ch.get("title",f"图表{i+1}"), use_container_width=True)
+                    if cp and os.path.exists(cp): st.image(cp, caption=ch.get("title",f"图表{i+1}"), width='stretch')
                     else: st.caption(f"图表 {i+1}: {ch.get('title','')}")
         st.markdown("---"); st.markdown("### 📝 分析报告")
         rc = o.get("report_content","")
@@ -119,11 +119,11 @@ with tab3:
         with e1:
             rp = o.get("report_path","")
             if rp and os.path.exists(rp):
-                with open(rp,"r",encoding="utf-8") as f: st.download_button("📄 下载Markdown报告",f.read(),file_name=os.path.basename(rp),mime="text/markdown",use_container_width=True)
+                with open(rp,"r",encoding="utf-8") as f: st.download_button("📄 下载Markdown报告",f.read(),file_name=os.path.basename(rp),mime="text/markdown",width='stretch')
         with e2:
             jp = o.get("json_path","")
             if jp and os.path.exists(jp):
-                with open(jp,"r",encoding="utf-8") as f: st.download_button("📦 下载JSON数据",f.read(),file_name=os.path.basename(jp),mime="application/json",use_container_width=True)
+                with open(jp,"r",encoding="utf-8") as f: st.download_button("📦 下载JSON数据",f.read(),file_name=os.path.basename(jp),mime="application/json",width='stretch')
         with e3:
             if charts:
                 zp = OUTPUT_DIR / "charts_bundle.zip"
@@ -131,6 +131,29 @@ with tab3:
                     for ch in charts:
                         cp = ch.get("path","")
                         if cp and os.path.exists(cp): zf.write(cp, os.path.basename(cp))
-                with open(zp,"rb") as f: st.download_button("🗂️ 下载图表打包",f.read(),file_name="charts_bundle.zip",mime="application/zip",use_container_width=True)
+                with open(zp,"rb") as f: st.download_button("🗂️ 下载图表打包",f.read(),file_name="charts_bundle.zip",mime="application/zip",width='stretch')
+
+        # === 新增：一键导出完整分析包（报告+JSON数据+全部图表+执行日志） ===
+        st.markdown("---"); st.markdown("### 📦 一键导出完整分析包")
+        st.caption("将 Markdown 报告、结构化 JSON 数据、全部图表与 Agent 执行日志打包为一个 zip")
+        bundle_path = OUTPUT_DIR / "latest_analysis_bundle.zip"
+        with zipfile.ZipFile(bundle_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            rp = o.get("report_path","")
+            if rp and os.path.exists(rp): zf.write(rp, f"report/{os.path.basename(rp)}")
+            jp = o.get("json_path","")
+            if jp and os.path.exists(jp): zf.write(jp, f"data/{os.path.basename(jp)}")
+            for ch in charts:
+                cp = ch.get("path","")
+                if cp and os.path.exists(cp): zf.write(cp, f"charts/{os.path.basename(cp)}")
+            if st.session_state.coordinator:
+                logs = st.session_state.coordinator.get_execution_log()
+                log_txt = "\n".join(
+                    f"[{l.get('timestamp','')}] [{l.get('status','info')}] [{l.get('agent','')}] {l.get('action','')} {l.get('details','')}"
+                    for l in logs)
+                zf.writestr("execution_log.txt", log_txt)
+        with open(bundle_path,"rb") as f:
+            st.download_button("📦 一键下载完整分析包", f.read(),
+                               file_name="analysis_bundle.zip", mime="application/zip",
+                               type="primary", width='stretch')
 
 st.markdown("---"); st.caption("多 Agent 协作自动化数据分析系统 | 数据读取→清洗→分析→可视化→报告 全流程自动化")

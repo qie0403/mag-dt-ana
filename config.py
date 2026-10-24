@@ -4,6 +4,13 @@
 import os
 from pathlib import Path
 
+# 加载 .env 环境变量（可选：未安装 python-dotenv 或没有 .env 文件时静默跳过）
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).parent.resolve() / ".env")
+except ImportError:
+    pass
+
 BASE_DIR = Path(__file__).parent.resolve()
 OUTPUT_DIR = BASE_DIR / "output"
 SAMPLES_DIR = BASE_DIR / "samples"

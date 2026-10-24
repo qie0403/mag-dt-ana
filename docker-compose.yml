@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mag-dt-ana:
+    build: .
+    container_name: multi-agent-data-analyzer
+    restart: always
+    ports:
+      - "8501:8501"
+    volumes:
+      # 挂载环境变量文件
+      - ./.env:/app/.env
+      # 挂载输出目录，保留生成的分析报告和图表
+      - ./output:/app/output
+    environment:
+      - TZ=Asia/Shanghai

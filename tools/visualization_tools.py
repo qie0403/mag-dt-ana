@@ -1,6 +1,7 @@
 """
 可视化工具模块
 """
+import logging
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -10,8 +11,12 @@ import pandas as pd
 from config import OUTPUT_DIR, PLOT_DPI, PLOT_FIGSIZE, CHART_FORMAT
 from utils.helpers import safe_filename, timestamp_str
 
-plt.rcParams["font.sans-serif"] = ["SimHei", "Microsoft YaHei", "Arial Unicode MS", "DejaVu Sans"]
+# 微软雅黑同时带 Regular(msyh.ttc) 与 Bold(msyhbd.ttc)，
+# 能正确匹配 fontweight="bold"，避免 SimHei 无 bold 字重触发的 findfont 警告。
+plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "Arial Unicode MS", "DejaVu Sans"]
 plt.rcParams["axes.unicode_minus"] = False
+# 双保险：压掉 findfont 在缺字重时往 stderr 打的冗余日志
+logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
 
 class VisualizationTools:
